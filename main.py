@@ -35,6 +35,12 @@ def output_path() -> Path:
 
 
 def main() -> int:
+    # The gate accepts 1-200 characters of UTF-8 text. Refuse loudly
+    # rather than ship a line the gate would throw out.
+    if not 1 <= len(LINE) <= 200:
+        raise ValueError(
+            f"entry line is {len(LINE)} characters; the gate allows 1-200"
+        )
     target = output_path()
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_bytes(LINE.encode("utf-8"))
